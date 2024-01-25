@@ -12,6 +12,7 @@ public class DayThree2023 {
     private static final Logger logger = Logger.getLogger(DayThree2023.class.getName());
 
     private static List<Integer> xCoordinates;
+    private static List<Integer> gearCoordinates;
     private static int currentYIndex;
     private static int fileSum;
 
@@ -25,9 +26,10 @@ public class DayThree2023 {
         while(currentXIndex < line.length()){
             char character = line.charAt(currentXIndex);
             if(Character.isDigit(character)){
-                xCoordinates.add(currentXIndex);
+                xCoordinates = getNumber(line, currentXIndex);
+                currentXIndex = xCoordinates.getLast();
             }
-            if(!xCoordinates.isEmpty() && !Character.isDigit(character)){
+            else if(!xCoordinates.isEmpty() && !Character.isDigit(character)){
                 validateAndSum(line.substring(xCoordinates.getFirst(), currentXIndex));
                }
             currentXIndex++;
@@ -35,6 +37,35 @@ public class DayThree2023 {
         if( !xCoordinates.isEmpty()){
             validateAndSum(line.substring(xCoordinates.getFirst(), currentXIndex));
         }
+    }
+
+    private static void findGearSums(String line){
+        int currentXIndex = 0;
+        while(currentXIndex < line.length()){
+            char character = line.charAt(currentXIndex);
+            if(Character.isDigit(character)){
+                xCoordinates = getNumber(line, currentXIndex);
+                // Validate if * exists
+                currentXIndex = xCoordinates.getLast();
+            }
+            currentXIndex++;
+        }
+    }
+
+    private static List<Integer> getNumber(String line, int index){
+        int currentIndex = index;
+        char character;
+        List<Integer> indexList = new ArrayList<>();
+        while(currentIndex < line.length()){
+            character = line.charAt(currentIndex);
+            if(Character.isDigit(character)){
+                indexList.add(currentIndex);
+            } else {
+                break;
+            }
+            currentIndex++;
+        }
+        return indexList;
     }
 
     private static void validateAndSum(String line){
@@ -47,7 +78,12 @@ public class DayThree2023 {
         }
         xCoordinates = new ArrayList<>();
     }
+
+    private static void validateGearSum(String line){
+        
+    }
     private static void calculateLineSum(){
+        fileSum = 0;
         currentYIndex= 0;
         for(String line : fileInput){
             findWord(line);
@@ -71,15 +107,16 @@ public class DayThree2023 {
     public static void main(String[] args) throws IOException {
 
         xCoordinates = new ArrayList<>();
-        InputStream inputStream = DayThree2023.class.getResourceAsStream("/informationFiles/input23Day3.txt");
-        //InputStream inputStream = Day1.class.getResourceAsStream("/informationFiles/input23Day3Test.txt");
+        //InputStream inputStream = DayThree2023.class.getResourceAsStream("/informationFiles/input23Day3.txt");
+        InputStream inputStream = Day1.class.getResourceAsStream("/informationFiles/input23Day3Test.txt");
         fileInput = FileHandling.readFromInputAndMakeList(inputStream);
         long startTime = System.nanoTime();
+        calculateLineSum();
         long endTime = System.nanoTime();
         //findWord(fileInput.getFirst());
-        calculateLineSum();
         logger.info(String.format("Problem one took %d milliseconds", ((endTime-startTime)/100000)));
         startTime = System.nanoTime();
+        //calculateLineSum(true);
         endTime = System.nanoTime();
         logger.info(String.format("Problem two took %d milliseconds", ((endTime-startTime)/100000)));
     }
