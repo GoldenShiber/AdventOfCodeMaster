@@ -13,7 +13,7 @@ public class DayOne2024 {
 
     private static final List<Integer> leftList = new ArrayList<>();
     private static final List<Integer> rightList = new ArrayList<>();
-    private static final Map<Integer, Integer> rightOccureance = new HashMap<>();
+    private static final Map<Integer, Integer> rightOccurrence = new HashMap<>();
 
 
     public static void solution(List<String> fileInput){
@@ -39,13 +39,13 @@ public class DayOne2024 {
     }
 
     // second solution is just a map solution...
-    public static void solutionTwo(List<String> fileInput) {
+    public static void solutionTwo() {
         int similarityResult = 0;
         for(Integer number : rightList){
-            rightOccureance.put(number,  rightOccureance.getOrDefault(number, 0) +1 );
+            rightOccurrence.put(number,  rightOccurrence.getOrDefault(number, 0) +1 );
         }
         for(Integer number : leftList){
-            similarityResult += number * rightOccureance.getOrDefault(number, 0);
+            similarityResult += number * rightOccurrence.getOrDefault(number, 0);
         }
         LOGGER.info("The similarity in the list is: " + similarityResult);
     }
@@ -55,15 +55,13 @@ public class DayOne2024 {
         List<String> fileOutput;
 
         InputStream inputStream = DayOne2024.class.getResourceAsStream("/informationFiles/input24Day1.txt");
-        //Object a = Day12024.class.getResource("/informationFiles/input24Day1.txt");
         fileOutput= FileHandling.readFromInputAndMakeList(inputStream);
         long startTime = System.nanoTime();
-        //String testString = FileHandling.readFileFromFileSystem(filePath);
         solution(fileOutput);
         long endTime = System.nanoTime();
         LOGGER.info(String.format("Problem one took %d milliseconds", ((endTime-startTime)/100000)));
         startTime = System.nanoTime();
-        solutionTwo(fileOutput);
+        solutionTwo();
         endTime = System.nanoTime();
         LOGGER.info(String.format("Problem two took %d milliseconds", ((endTime-startTime)/100000)));
     }
